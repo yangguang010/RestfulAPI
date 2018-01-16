@@ -34,7 +34,6 @@ public class TestDevice {
 
         System.out.println("code:" + response.getCode() + "   msg:"+response.getMsg());
     }
-
     @Test
     public void testAlterDeviceName() {
         String url = "https://open.ys7.com/api/lapp/device/name/update";
@@ -88,7 +87,6 @@ public class TestDevice {
         System.out.println("data:" +response.getData().get(1));
         System.out.println("data:" +response.getJson());
     }
-
     @Test
     public void testGetOneDeviceApi() {
         String url = "https://open.ys7.com/api/lapp/device/info";

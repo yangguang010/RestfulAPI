@@ -14,7 +14,6 @@ public class TestGetToken {
     public void getToken() {
         String appKey = "6bb1336cda084f31a8934e16b12317cd";
         String appSecret = "e07fb7ced4c3ffa951091024c6d430e9";
-
         GetToken tokenApi = new GetToken(appKey,appSecret);
         BasicResponse<AccessToken> response = tokenApi.executeApi();
         System.out.println("code: "+ response.getCode() + "  msg:" + response.getMsg() + " data:" + response.getDataInternal());
