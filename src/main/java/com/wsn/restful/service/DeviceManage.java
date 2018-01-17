@@ -85,4 +85,13 @@ public interface DeviceManage {
      */
     BasicResponse<List<CameraListResponse>> getCameraList(String url,String accessToken,int pageStart,int pageSize);
 
+    /**
+     * 该接口用于互联互通设备根据UUID查询抓拍的图片
+     * @param url 请求地址
+     * @param accessToken 授权过程中获取到的access_token
+     * @param uuid 设备sdk抓拍返回的UUID
+     * @param size 图片的大小 范围在[0~1280]
+     * @return 图片信息的json数据
+     */
+    BasicResponse<CapturePicture> getPictureByUUID(String url,String accessToken,String uuid,int size);
 }

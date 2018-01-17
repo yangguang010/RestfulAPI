@@ -138,4 +138,19 @@ public class DeviceManageImpl implements DeviceManage {
         return response;
     }
 
+    /**
+     * 该接口用于互联互通设备根据UUID查询抓拍的图片
+     *
+     * @param url         请求地址
+     * @param accessToken 授权过程中获取到的access_token
+     * @param uuid        设备sdk抓拍返回的UUID
+     * @param size        图片的大小 范围在[0~1280]
+     * @return 图片信息的json数据
+     */
+    @Override
+    public BasicResponse<CapturePicture> getPictureByUUID(String url, String accessToken, String uuid, int size) {
+        GetPictureByUUIDApi getPictureByUUIDApi = new GetPictureByUUIDApi(url,accessToken,uuid,size);
+        BasicResponse<CapturePicture> response = getPictureByUUIDApi.executeApi();
+        return response;
+    }
 }

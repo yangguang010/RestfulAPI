@@ -1,51 +1,47 @@
 package com.wsn.restful.api.device;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mysql.cj.core.conf.ReadableStringProperty;
 import com.wsn.restful.api.AbstractAPI;
 import com.wsn.restful.http.HttpPostMethod;
 import com.wsn.restful.request.RequestInfo;
 import com.wsn.restful.response.BasicResponse;
-import com.wsn.restful.response.CapturePicture;
+import com.wsn.restful.response.DeviceStatusResponse;
 import com.wsn.restful.util.HttpUtil;
 import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpPost;
 
 import java.io.IOException;
 import java.util.Map;
 
 /**
+ * 该接口用于根据序列号通道号获取
  * Created by songyangguang on 2018/1/17.
  */
-public class GetPictureByUUIDApi extends AbstractAPI {
+public class GetDeviceStatusApi extends AbstractAPI{
     private String accessToken;
-    private String uuid;//设备sdk抓拍返回的uuid
-    private int size;//图片大小，范围在[0~1280]
+    private String deviceSerial;//设备序列号
+    private int channel;//通道号，默认是1
     private HttpPostMethod httpPostMethod;
 
-    public GetPictureByUUIDApi(String url,String accessToken,String uuid,int size) {
+    public GetDeviceStatusApi(String url,String accessToken,String deviceSerial,int channel) {
         this.url = url;
         this.accessToken = accessToken;
-        this.uuid = uuid;
-        this.size = size;
+        this.deviceSerial = deviceSerial;
+        this.channel = channel;
         this.method = RequestInfo.Method.POST;
         this.host = "open.ys7.com";
         this.content_type = "application/x-www-form-urlencoded";
 
         HttpUtil httpUtil = new HttpUtil();
-        Map<String,Object> headBody = httpUtil.setHeadMap(host,content_type);
+        Map<String,Object> headMap = httpUtil.setHeadMap(host,content_type);
         httpPostMethod = new HttpPostMethod(method);
-        httpPostMethod.setHeader(headBody);
+        httpPostMethod.setHeader(headMap);
 
-        Map<String,Object> bodyMap = httpUtil.setBodyMap(accessToken,null,null);
-        if(uuid != null) {
-            bodyMap.put("uuid",uuid);
-        }
-        if (size > 0 && size < 1280) {
-            bodyMap.put("size",size);
-        }
+        Map<String,Object> bodyMap = httpUtil.setBodyMap(accessToken,deviceSerial,null);
         httpPostMethod.setCompleteUrl(url,bodyMap);
     }
-    public BasicResponse<CapturePicture> executeApi() {
+
+    public BasicResponse<DeviceStatusResponse> executeApi() {
         ObjectMapper mapper = new ObjectMapper();
         BasicResponse response = null;
         HttpResponse httpResponse = httpPostMethod.execute();
@@ -53,16 +49,9 @@ public class GetPictureByUUIDApi extends AbstractAPI {
         try {
             response = mapper.readValue(httpResponse.getEntity().getContent(),BasicResponse.class);
             response.setJson(mapper.writeValueAsString(response));
-            Object data = mapper.readValue(mapper.writeValueAsString(response.getDataInternal()), CapturePicture.class);
-            response.setData(data);
+            
         } catch (IOException e) {
             e.printStackTrace();
         }
-        try {
-            httpPostMethod.httpClient.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return response;
     }
 }
