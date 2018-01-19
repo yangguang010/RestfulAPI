@@ -116,4 +116,19 @@ public class TestDevice {
         System.out.println("data1:" +response.getData().get(1));
         System.out.println("data_Json:" +response.getJson());
     }
+
+    @Test
+    public void testGetDeviceStatus() {
+        String url = "https://open.ys7.com/api/lapp/device/status/get";
+        String accessToken = "at.38s4iyczacw2eet7b3yyubgl912t0pz1-2rsetdrwx6-1xeqgcb-fvpvhhoev";
+        String deviceSerial = "824875874";
+        int channel = 1;
+
+        GetDeviceStatusApi getDeviceStatusApi = new GetDeviceStatusApi(url,accessToken,deviceSerial,channel);
+        BasicResponse<DeviceStatusResponse> response = getDeviceStatusApi.executeApi();
+
+        System.out.println("code:" + response.getCode());
+        System.out.println("MSG:" + response.getMsg());
+        System.out.println("data:" + response.getJson());
+    }
 }

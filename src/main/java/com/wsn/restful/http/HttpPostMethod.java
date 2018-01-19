@@ -1,6 +1,6 @@
 package com.wsn.restful.http;
 
-import com.sun.xml.internal.ws.server.ServerRtException;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;

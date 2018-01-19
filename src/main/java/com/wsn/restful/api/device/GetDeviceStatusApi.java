@@ -8,7 +8,6 @@ import com.wsn.restful.response.BasicResponse;
 import com.wsn.restful.response.DeviceStatusResponse;
 import com.wsn.restful.util.HttpUtil;
 import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpPost;
 
 import java.io.IOException;
 import java.util.Map;
@@ -47,11 +46,20 @@ public class GetDeviceStatusApi extends AbstractAPI{
         HttpResponse httpResponse = httpPostMethod.execute();
 
         try {
-            response = mapper.readValue(httpResponse.getEntity().getContent(),BasicResponse.class);
+            response = mapper.readValue(httpResponse.getEntity().getContent(), BasicResponse.class);
             response.setJson(mapper.writeValueAsString(response));
-            
+            Object data = mapper.readValue(mapper.writeValueAsString(response.getDataInternal()),DeviceStatusResponse.class);
+            response.setData(data);
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        try {
+            httpPostMethod.httpClient.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return response;
     }
 }
